@@ -10,7 +10,9 @@ class UIConstants {
       title: SvgPicture.asset(
         AssetsConstants.twitterLogo,
         color: Pallete.blueColor,
+        height: 30,
       ),
+      centerTitle: true,
     );
   }
 }
