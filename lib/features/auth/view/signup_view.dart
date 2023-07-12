@@ -1,32 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:tweet/common/rounded_small_button.dart';
-import 'package:tweet/features/auth/view/signup_view.dart';
-import 'package:tweet/features/auth/widgets/auth_field.dart';
-import 'package:tweet/theme/palette.dart';
-
+import 'package:tweet/features/auth/view/login_view.dart';
+import '../../../common/common.dart';
 import '../../../constants/constants.dart';
+import '../../../theme/theme.dart';
+import '../widgets/auth_field.dart';
 
-class LoginView extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const LoginView());
-  const LoginView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
+  static route() => MaterialPageRoute(builder: (context) => const SignUpView());
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _SignUpViewState extends State<SignUpView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,13 +57,13 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 //textpan
                 RichText(
-                  text: TextSpan(text: "Dont't have an account", children: [
+                  text: TextSpan(text: "Already have an account", children: [
                     TextSpan(
-                        text: ' Sign Up ',
+                        text: ' Login ',
                         style: const TextStyle(color: Pallete.blueColor),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Navigator.push(context, SignUpView.route());
+                            Navigator.push(context, LoginView.route());
                           })
                   ]),
                 )
