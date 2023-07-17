@@ -16,6 +16,9 @@ final authAPIProvider = Provider((ref) {
 abstract class IAuthAPI {
   FutureEither<models.User> signUp(
       {required String email, required String password});
+
+  FutureEither<models.Session> login(
+      {required String email, required String password});
 }
 
 class AuthAPI implements IAuthAPI {
@@ -28,6 +31,21 @@ class AuthAPI implements IAuthAPI {
       final account = await _account.create(
           userId: ID.unique(), email: email, password: password);
       return right(account);
+    } on AppwriteException catch (e, stackTrace) {
+      return left(
+          Failure(e.message ?? "some unexpected error occured", stackTrace));
+    } catch (e, stackTrace) {
+      return left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<models.Session> login(
+      {required String email, required String password}) async {
+    try {
+      final session =
+          await _account.createEmailSession(email: email, password: password);
+      return right(session);
     } on AppwriteException catch (e, stackTrace) {
       return left(
           Failure(e.message ?? "some unexpected error occured", stackTrace));
