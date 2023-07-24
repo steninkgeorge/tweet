@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tweet/common/loading_page.dart';
 import 'package:tweet/common/rounded_small_button.dart';
 import 'package:tweet/features/auth/view/signup_view.dart';
 import 'package:tweet/features/auth/widgets/auth_field.dart';
@@ -42,7 +43,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     return Scaffold(
       appBar: appbar,
       body: isLoading
-          ? const CircularProgressIndicator()
+          ? const Loader()
           : Center(
               child: SingleChildScrollView(
                 child: Padding(
