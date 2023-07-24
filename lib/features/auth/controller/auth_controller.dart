@@ -23,7 +23,7 @@ class AuthController extends StateNotifier<bool> {
       required String password,
       required BuildContext context}) async {
     state = true;
-    final res = await _authAPI.signUp(email: email, password: password);
+    final res = await _authAPI.signUp(email: email, password: password);  
     state = false;
     res.fold(
         (l) => showSnackBar(context, l.message),
