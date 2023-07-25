@@ -1,8 +1,13 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:tweet/core/core.dart';
 import 'package:tweet/models/user_model.dart';
 import 'package:tweet/constants/constants.dart';
+
+final userAPIprovider = Provider((ref) {
+  return UserAPI(db: ref.watch(appwriteDatabaseProvider));
+});
 
 abstract class IUserAPI {
   FutureEitherVoid saveUserData(UserModel userModel);
