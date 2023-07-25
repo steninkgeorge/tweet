@@ -2,13 +2,16 @@ import 'package:appwrite/models.dart' as model;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tweet/apis/auth_api.dart';
+import 'package:tweet/apis/user_api.dart';
 import 'package:tweet/core/core.dart';
 import 'package:tweet/features/auth/view/login_view.dart';
 import 'package:tweet/features/home/view/home_view.dart';
+import 'package:tweet/models/user_model.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
-  return AuthController(authAPI: ref.watch(authAPIProvider));
+  return AuthController(
+      authAPI: ref.watch(authAPIProvider), userAPI: ref.watch(userAPIprovider));
 });
 
 final currentUserAccountProvider = FutureProvider((ref) {
@@ -18,8 +21,10 @@ final currentUserAccountProvider = FutureProvider((ref) {
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
-  AuthController({required AuthAPI authAPI})
+  final UserAPI _userAPI;
+  AuthController({required AuthAPI authAPI, required UserAPI userAPI})
       : _authAPI = authAPI,
+        _userAPI = userAPI,
         super(false);
 
   //state=isLoading
@@ -36,6 +41,16 @@ class AuthController extends StateNotifier<bool> {
     res.fold(
         (l) => showSnackBar(context, l.message),
         (r) => {
+              UserModel(
+                  email: email,
+                  name: getNameFromEmail(email),
+                  followers: [],
+                  following: [],
+                  profilePic: '',
+                  bannerPic: '',
+                  uid: '',
+                  bio: '',
+                  isTwitterBlue: false),
               showSnackBar(context, "Account created , Please login"),
               Navigator.push(context, LoginView.route())
             });
