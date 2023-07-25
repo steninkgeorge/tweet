@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:tweet/common/common.dart';
 import 'package:tweet/common/loading_page.dart';
 import 'package:tweet/features/auth/controller/auth_controller.dart';
