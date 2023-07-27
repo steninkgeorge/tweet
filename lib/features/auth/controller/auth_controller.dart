@@ -30,7 +30,6 @@ class AuthController extends StateNotifier<bool> {
   //state=isLoading
 
   Future<model.User?> currentUser() => _authAPI.currentUserAccount();
-
   void signUp(
       {required String email,
       required String password,
@@ -38,22 +37,23 @@ class AuthController extends StateNotifier<bool> {
     state = true;
     final res = await _authAPI.signUp(email: email, password: password);
     state = false;
-    res.fold(
-        (l) => showSnackBar(context, l.message),
-        (r) => {
-              UserModel(
-                  email: email,
-                  name: getNameFromEmail(email),
-                  followers: [],
-                  following: [],
-                  profilePic: '',
-                  bannerPic: '',
-                  uid: '',
-                  bio: '',
-                  isTwitterBlue: false),
-              showSnackBar(context, "Account created , Please login"),
-              Navigator.push(context, LoginView.route())
-            });
+    res.fold((l) => showSnackBar(context, l.message), (r) async {
+      UserModel userModel = UserModel(
+          email: email,
+          name: getNameFromEmail(email),
+          followers: [],
+          following: [],
+          profilePic: '',
+          bannerPic: '',
+          uid: '',
+          bio: '',
+          isTwitterBlue: false);
+      final res2 = await _userAPI.saveUserData(userModel);
+      res2.fold((l) => showSnackBar(context, l.message), (r) {
+        showSnackBar(context, "Account created , Please login");
+        Navigator.push(context, LoginView.route());
+      });
+    });
   }
 
   void login(
