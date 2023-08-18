@@ -18,6 +18,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
+    print(currentUser);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -38,7 +39,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
       ),
       body: currentUser == null
           ? const Loader()
-          : SafeArea(
+          : const SafeArea(
               child: SingleChildScrollView(
               child: Column(
                 children: [
