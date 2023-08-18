@@ -56,7 +56,7 @@ class AuthController extends StateNotifier<bool> {
           following: [],
           profilePic: '',
           bannerPic: '',
-          uid: '',
+          uid: r.$id,
           bio: '',
           isTwitterBlue: false);
 
