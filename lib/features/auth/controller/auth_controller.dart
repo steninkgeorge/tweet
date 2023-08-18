@@ -17,13 +17,13 @@ final authControllerProvider =
 final currentUserDetailsProvider = FutureProvider((ref) {
   final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
   final userDetails = ref.watch(userDetailsProvider(currentUserId));
-
-  return userDetails.value;
+  var val = userDetails.value;
+  print("value $val");
+  return userDetails.asData;
 });
 
 final userDetailsProvider = FutureProvider.family((ref, String uid) {
   final authController = ref.watch(authControllerProvider.notifier);
-  print(" uid $uid");
   return authController.getUserData(uid);
 });
 
