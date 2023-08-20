@@ -17,9 +17,7 @@ final authControllerProvider =
 final currentUserDetailsProvider = FutureProvider((ref) {
   final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
   final userDetails = ref.watch(userDetailsProvider(currentUserId));
-  var val = userDetails.value;
-  print("value $val");
-  return userDetails.asData;
+  return userDetails.value;
 });
 
 final userDetailsProvider = FutureProvider.family((ref, String uid) {
@@ -54,12 +52,12 @@ class AuthController extends StateNotifier<bool> {
       UserModel userModel = UserModel(
           email: email,
           name: getNameFromEmail(email),
-          followers: [],
-          following: [],
-          profilePic: '',
-          bannerPic: '',
+          followers: ['0'],
+          following: ['0'],
+          profilePic: ' ',
+          bannerPic: ' ',
           uid: r.$id,
-          bio: '',
+          bio: ' ',
           isTwitterBlue: false);
 
       final res2 = await _userAPI.saveUserData(userModel);
@@ -84,7 +82,6 @@ class AuthController extends StateNotifier<bool> {
   Future<UserModel> getUserData(String uid) async {
     final document = await _userAPI.getUserData(uid);
     final updatedUser = UserModel.fromMap(document.data);
-
     return updatedUser;
   }
 }

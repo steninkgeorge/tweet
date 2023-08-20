@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tweet/apis/auth_api.dart';
 import 'package:tweet/common/common.dart';
 import 'package:tweet/common/rounded_small_button.dart';
 import 'package:tweet/features/auth/controller/auth_controller.dart';
@@ -18,7 +19,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
-    print(currentUser);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -39,12 +40,15 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
       ),
       body: currentUser == null
           ? const Loader()
-          : const SafeArea(
+          : SafeArea(
               child: SingleChildScrollView(
               child: Column(
                 children: [
                   Row(
-                    children: [CircleAvatar()],
+                    children: [
+                      CircleAvatar(
+                          backgroundImage: NetworkImage(currentUser.profilePic))
+                    ],
                   )
                 ],
               ),
