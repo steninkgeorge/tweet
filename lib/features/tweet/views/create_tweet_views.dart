@@ -12,7 +12,8 @@ class CreateTweetScreen extends ConsumerStatefulWidget {
       MaterialPageRoute(builder: (context) => const CreateTweetScreen());
 
   @override
-  ConsumerState<CreateTweetScreen> createState() => _CreateTweetScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CreateTweetScreenState();
 }
 
 class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {

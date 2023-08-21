@@ -52,12 +52,12 @@ class AuthController extends StateNotifier<bool> {
       UserModel userModel = UserModel(
           email: email,
           name: getNameFromEmail(email),
-          followers: ['0'],
-          following: ['0'],
-          profilePic: ' ',
-          bannerPic: ' ',
+          followers: [],
+          following: [],
+          profilePic: '',
+          bannerPic: '',
           uid: r.$id,
-          bio: ' ',
+          bio: '',
           isTwitterBlue: false);
 
       final res2 = await _userAPI.saveUserData(userModel);
