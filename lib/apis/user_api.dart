@@ -38,6 +38,9 @@ class UserAPI implements IUserAPI {
 
   @override
   Future<models.Document> getUserData(String uid) {
+    print("getuserdata");
+    print(uid);
+
     return _db.getDocument(
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.usersCollection,
