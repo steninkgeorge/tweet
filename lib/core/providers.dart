@@ -4,7 +4,6 @@ import 'package:tweet/constants/appwrite_constants.dart';
 
 final appwriteClientProvider = Provider((ref) {
   Client client = Client();
-
   return client
       .setEndpoint(AppwriteConstants.endPoint)
       .setProject(AppwriteConstants.projectId)
@@ -18,6 +17,5 @@ final appwriteAccountProvider = Provider((ref) {
 
 final appwriteDatabaseProvider = Provider((ref) {
   final client = ref.watch(appwriteClientProvider);
-
   return Databases(client);
 });

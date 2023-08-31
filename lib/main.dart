@@ -29,6 +29,6 @@ class MyApp extends ConsumerWidget {
               return const SignUpView();
             },
             error: (error, StackTrace) => ErrorPage(error: error.toString()),
-            loading: () => LoadingPage()));
+            loading: () => const LoadingPage()));
   }
 }

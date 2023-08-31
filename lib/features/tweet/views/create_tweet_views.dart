@@ -1,12 +1,8 @@
-import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tweet/common/common.dart';
 import 'package:tweet/features/auth/controller/auth_controller.dart';
-import 'package:tweet/models/user_model.dart';
 import 'package:tweet/theme/theme.dart';
-
-import '../../../apis/user_api.dart';
 
 class CreateTweetScreen extends ConsumerStatefulWidget {
   const CreateTweetScreen({super.key});
@@ -23,8 +19,6 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
-    final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
-    final userDetails = ref.watch(userDetailsProvider(currentUserId));
 
     return Scaffold(
       appBar: AppBar(

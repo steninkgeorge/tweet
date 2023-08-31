@@ -7,8 +7,10 @@ import 'package:tweet/core/core.dart';
 import 'package:tweet/models/user_model.dart';
 import 'package:tweet/constants/constants.dart';
 
-final userAPIprovider = Provider((ref) {
-  return UserAPI(db: ref.watch(appwriteDatabaseProvider));
+final userAPIProvider = Provider((ref) {
+  return UserAPI(
+    db: ref.watch(appwriteDatabaseProvider),
+  );
 });
 
 abstract class IUserAPI {
@@ -18,19 +20,27 @@ abstract class IUserAPI {
 
 class UserAPI implements IUserAPI {
   final Databases _db;
-  UserAPI({required Databases db}) : _db = db;
+  UserAPI({
+    required Databases db,
+  }) : _db = db;
 
   @override
   FutureEitherVoid saveUserData(UserModel userModel) async {
     try {
       await _db.createDocument(
-          databaseId: AppwriteConstants.databaseId,
-          collectionId: AppwriteConstants.usersCollection,
-          documentId: userModel.uid,
-          data: userModel.toMap());
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.usersCollection,
+        documentId: userModel.uid,
+        data: userModel.toMap(),
+      );
       return right(null);
     } on AppwriteException catch (e, st) {
-      return left(Failure(e.message ?? 'some unexpected error occured', st));
+      return left(
+        Failure(
+          e.message ?? 'Some unexpected error occurred',
+          st,
+        ),
+      );
     } catch (e, st) {
       return left(Failure(e.toString(), st));
     }
@@ -38,12 +48,10 @@ class UserAPI implements IUserAPI {
 
   @override
   Future<models.Document> getUserData(String uid) {
-    print("getuserdata");
-    print(uid);
-
     return _db.getDocument(
-        databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.usersCollection,
-        documentId: uid);
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.usersCollection,
+      documentId: uid,
+    );
   }
 }
