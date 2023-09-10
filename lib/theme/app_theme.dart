@@ -11,5 +11,5 @@ class AppTheme {
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Pallete.blueColor,
       ),
-      iconTheme: const IconThemeData(color: Pallete.blueColor));
+      iconTheme: const IconThemeData(color: Pallete.greyColor));
 }
