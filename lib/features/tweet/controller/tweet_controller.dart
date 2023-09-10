@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tweet/apis/storage_api.dart';
 import 'package:tweet/apis/tweet_api.dart';
 import 'package:tweet/core/core.dart';
 import 'package:tweet/features/auth/controller/auth_controller.dart';
@@ -9,16 +10,35 @@ import 'package:tweet/models/tweet_model.dart';
 
 final tweetControllerProvider =
     StateNotifierProvider<TweetController, bool>((ref) {
-  return TweetController(ref: ref, tweetAPI: ref.watch(TweetAPIProvider));
+  return TweetController(
+      ref: ref,
+      tweetAPI: ref.watch(tweetAPIProvider),
+      storageAPI: ref.watch(storageProvider));
+});
+
+final getTweetsProvider = FutureProvider((ref) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweets();
 });
 
 class TweetController extends StateNotifier<bool> {
   final Ref _ref;
   final TweetAPI _tweetAPI;
-  TweetController({required Ref ref, required TweetAPI tweetAPI})
+  final StorageAPI _storageAPI;
+
+  TweetController(
+      {required Ref ref,
+      required TweetAPI tweetAPI,
+      required StorageAPI storageAPI})
       : _ref = ref,
         _tweetAPI = tweetAPI,
+        _storageAPI = storageAPI,
         super(false);
+
+  Future<List<Tweet>> getTweets() async {
+    final tweetList = await _tweetAPI.tweetList();
+    return tweetList.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
 
   void shareTweet(
       {required List<File> images,
@@ -39,18 +59,19 @@ class TweetController extends StateNotifier<bool> {
   void _shareImageTweet(
       {required List<File> images,
       required String text,
-      required BuildContext context}) async{
-         state = true;
+      required BuildContext context}) async {
+    state = true;
     final hashtags = _getHashTag(text);
     final link = _getLinkFromText(text);
     final user = _ref.read(currentUserDetailsProvider).value!;
+    final imageLinks = await _storageAPI.uploadImage(images);
     Tweet tweet = Tweet(
         text: text,
         hashtags: hashtags,
         link: link,
-        imageLinks: [],
+        imageLinks: imageLinks,
         uid: user.uid,
-        tweetType: TweetType.text,
+        tweetType: TweetType.image,
         tweetedAt: DateTime.now(),
         likes: [],
         commentIds: [],
@@ -58,7 +79,9 @@ class TweetController extends StateNotifier<bool> {
         reshareCount: 0);
 
     final res = await _tweetAPI.shareTweet(tweet);
-      }
+    state = false;
+    res.fold((l) => showSnackBar(context, l.message), (r) => null);
+  }
 
   void _shareTextTweet(
       {required String text, required BuildContext context}) async {
@@ -85,7 +108,7 @@ class TweetController extends StateNotifier<bool> {
   }
 
   String _getLinkFromText(String text) {
-    String link = ' ';
+    String link = '';
     List<String> wordsInSentence = text.split(' ');
     for (String word in wordsInSentence) {
       if (word.startsWith('https://') || word.startsWith('www.')) {
@@ -100,7 +123,7 @@ class TweetController extends StateNotifier<bool> {
     List<String> wordsInSentence = text.split(' ');
     for (String word in wordsInSentence) {
       if (word.startsWith('#')) {
-        hashtags.add(word);
+        hashtags.add('${word} ');
       }
     }
     return hashtags;

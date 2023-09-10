@@ -6,12 +6,13 @@ import 'package:tweet/constants/appwrite_constants.dart';
 import 'package:tweet/core/core.dart';
 import 'package:tweet/models/tweet_model.dart';
 
-final TweetAPIProvider = Provider((ref) {
+final tweetAPIProvider = Provider((ref) {
   return TweetAPI(db: ref.watch(appwriteDatabaseProvider));
 });
 
 abstract class ITweetAPI {
   FutureEither<Document> shareTweet(Tweet tweet);
+  Future<List<Document>> tweetList();
 }
 
 class TweetAPI implements ITweetAPI {
@@ -32,5 +33,13 @@ class TweetAPI implements ITweetAPI {
     } catch (e, st) {
       return left(Failure(e.toString(), st));
     }
+  }
+
+  @override
+  Future<List<Document>> tweetList() async {
+    final document = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.tweetsCollection);
+    return document.documents;
   }
 }
