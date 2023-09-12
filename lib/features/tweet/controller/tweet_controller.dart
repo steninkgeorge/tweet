@@ -7,18 +7,24 @@ import 'package:tweet/apis/tweet_api.dart';
 import 'package:tweet/core/core.dart';
 import 'package:tweet/features/auth/controller/auth_controller.dart';
 import 'package:tweet/models/tweet_model.dart';
+import 'package:tweet/models/user_model.dart';
 
 final tweetControllerProvider =
-    StateNotifierProvider<TweetController, bool>((ref) {
+    StateNotifierProvider.autoDispose<TweetController, bool>((ref) {
   return TweetController(
       ref: ref,
       tweetAPI: ref.watch(tweetAPIProvider),
       storageAPI: ref.watch(storageProvider));
 });
 
-final getTweetsProvider = FutureProvider((ref) {
+final getTweetsProvider = FutureProvider.autoDispose((ref) {
   final tweetController = ref.watch(tweetControllerProvider.notifier);
   return tweetController.getTweets();
+});
+
+final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
+  final tweetAPI = ref.watch(tweetAPIProvider);
+  return tweetAPI.getLatestTweet();
 });
 
 class TweetController extends StateNotifier<bool> {
@@ -127,5 +133,18 @@ class TweetController extends StateNotifier<bool> {
       }
     }
     return hashtags;
+  }
+
+  void likeTweet(Tweet tweet, UserModel user) async {
+    List<String> likes = tweet.likes;
+    if (tweet.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+
+    tweet = tweet.copyWith(likes: likes);
+    final res = await _tweetAPI.likeTweet(tweet);
+    res.fold((l) => null, (r) => null);
   }
 }

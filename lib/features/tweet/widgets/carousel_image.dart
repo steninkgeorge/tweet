@@ -13,7 +13,6 @@ class _CarouselState extends State<CarouselImage> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
-    print('${widget.imageLinks}');
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -33,7 +32,7 @@ class _CarouselState extends State<CarouselImage> {
                 }).toList(),
                 options: CarouselOptions(
                   viewportFraction: 1,
-                  height: 400,
+                  height: 300,
                   enableInfiniteScroll: false,
                   onPageChanged: (index, reason) {
                     setState(() {
@@ -43,10 +42,11 @@ class _CarouselState extends State<CarouselImage> {
                 )),
             if (widget.imageLinks.length > 1)
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: widget.imageLinks.asMap().entries.map((e) {
                   return Container(
-                    width: 12,
-                    height: 12,
+                    width: 5,
+                    height: 5,
                     margin: EdgeInsets.symmetric(horizontal: 5),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
