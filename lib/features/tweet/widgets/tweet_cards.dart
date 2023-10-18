@@ -47,6 +47,22 @@ class TweetCard extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             //retweeted
+                            if (tweet.retweetedBy.isNotEmpty)
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    AssetsConstants.retweetIcon,
+                                    // ignore: deprecated_member_use
+                                    color: Pallete.greyColor,
+                                    height: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text('${tweet.retweetedBy} retweeted',style: const TextStyle(color: Pallete.greyColor,fontSize: 16,fontWeight: FontWeight.w500),)
+                                ],
+                              ),
+
                             Row(
                               children: [
                                 Container(
@@ -99,7 +115,13 @@ class TweetCard extends ConsumerWidget {
                                   TweetIconButton(
                                       pathname: AssetsConstants.retweetIcon,
                                       text: (tweet.reshareCount).toString(),
-                                      onTap: () {}),
+                                      onTap: () {
+                                        ref
+                                            .read(tweetControllerProvider
+                                                .notifier)
+                                            .reshareTweet(
+                                                tweet, currentUser, context);
+                                      }),
                                   LikeButton(
                                     onTap: (isLiked) async {
                                       ref
